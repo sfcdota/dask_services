@@ -6,7 +6,7 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:34:00 by cbach             #+#    #+#              #
-#    Updated: 2021/01/29 13:24:43 by cbach            ###   ########.fr        #
+#    Updated: 2021/03/29 19:15:41 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,4 +84,5 @@ spec:
       - name: sys-persistent-storage
         persistentVolumeClaim:
           claimName: sys-pv-claim
-
+      nodeSelector:
+        type: main

@@ -6,7 +6,7 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:34:30 by cbach             #+#    #+#              #
-#    Updated: 2021/01/29 12:22:24 by cbach            ###   ########.fr        #
+#    Updated: 2021/03/29 19:16:11 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,3 +47,5 @@ spec:
         ports:
         - containerPort: 5050
           name: wordpress
+      nodeSelector:
+        type: main

@@ -6,7 +6,7 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:33:36 by cbach             #+#    #+#              #
-#    Updated: 2021/01/29 11:28:47 by cbach            ###   ########.fr        #
+#    Updated: 2021/03/29 19:15:13 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,8 @@ spec:
         imagePullPolicy: Never
         ports:
           - containerPort: 3000
+      nodeSelector:
+        type: main
 ---
 apiVersion: v1
 kind: Service

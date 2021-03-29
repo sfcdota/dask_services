@@ -6,7 +6,7 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:34:32 by cbach             #+#    #+#              #
-#    Updated: 2021/01/29 14:36:34 by cbach            ###   ########.fr        #
+#    Updated: 2021/03/29 20:07:58 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,10 @@ WORDPRESS_DIR=srcs/wordpress
 
 
 #start minikube VM
-minikube start --vm-driver=virtualbox
+minikube start --memory 8192 --cpus 4 --nodes 2 --vm-driver=virtualbox
+# kubectl label nodes minikube type=main
+# kubectl label nodes minikube-m02 type=dask
+# kubectl get nodes --show-labels -o wide
 eval $(minikube docker-env)
 minikube addons enable metallb
 

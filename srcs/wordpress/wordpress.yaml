@@ -1,0 +1,49 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    wordpress.yaml                                     :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/12/11 13:34:30 by cbach             #+#    #+#              #
+#    Updated: 2021/01/29 12:22:24 by cbach            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress
+  annotations:
+    metallb.universe.tf/allow-shared-ip: dvadvavosem
+spec:
+  ports:
+    - port: 5050
+      protocol: TCP
+  selector:
+    app: wordpress
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+      - image: wordpress
+        name: wordpress
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5050
+          name: wordpress

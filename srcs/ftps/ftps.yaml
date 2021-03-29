@@ -1,0 +1,77 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    ftps.yaml                                          :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/12/11 13:33:39 by cbach             #+#    #+#              #
+#    Updated: 2021/01/29 15:18:53 by cbach            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ftps-pv-claim
+  labels:
+    app: ftps
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: ftps
+spec:
+  selector:
+    matchLabels:
+      app: ftps
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ftps
+    spec:
+      volumes:
+      - name: ftps-persistent-storage
+        persistentVolumeClaim:
+          claimName: ftps-pv-claim
+      containers:
+      - name: ftps
+        image: ftps
+        imagePullPolicy: Never
+        ports:
+          - containerPort: 21
+          - containerPort: 22800
+          - containerPort: 22801
+        volumeMounts:
+        - name: ftps-persistent-storage
+          mountPath: /root/
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ftps
+  annotations:
+    metallb.universe.tf/allow-shared-ip: dvadvavosem
+spec:
+  selector:
+    app: ftps
+  type: LoadBalancer
+  ports:
+    - name: ftps
+      protocol: TCP
+      port: 21
+    - name: kek
+      protocol: TCP
+      port: 22800
+    - name: kek2
+      protocol: TCP
+      port: 22801

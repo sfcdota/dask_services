@@ -6,7 +6,7 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:33:53 by cbach             #+#    #+#              #
-#    Updated: 2021/01/29 13:03:28 by cbach            ###   ########.fr        #
+#    Updated: 2021/04/03 17:27:03 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,9 @@ data:
   config: |
     address-pools:
     - name: default
+      avoid-buggy-ips: true
       protocol: layer2
+      auto-assign: true
       addresses:
-      - 192.168.99.147-192.168.99.254
+      - 192.168.99.2-192.168.99.158
+      - 192.168.99.160-192.168.99.254

@@ -6,7 +6,7 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:34:32 by cbach             #+#    #+#              #
-#    Updated: 2021/03/29 20:07:58 by cbach            ###   ########.fr        #
+#    Updated: 2021/04/03 18:41:32 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,10 +20,12 @@ MYSQL_DIR=srcs/mysql
 PHPMYADMIN_DIR=srcs/phpmyadmin
 WORDPRESS_DIR=srcs/wordpress
 
-
+#delete old
+minikube delete
 #start minikube VM
-minikube start --memory 8192 --cpus 4 --nodes 2 --vm-driver=virtualbox
-# kubectl label nodes minikube type=main
+minikube start --memory 12288 --cpus 4 --vm-driver=virtualbox
+# minikube start --memory 12288 --cpus 4 --nodes 2 --vm-driver=virtualbox
+kubectl label nodes minikube type=main
 # kubectl label nodes minikube-m02 type=dask
 # kubectl get nodes --show-labels -o wide
 eval $(minikube docker-env)
@@ -32,13 +34,22 @@ minikube addons enable metallb
 #getting first available ip in minikube subnet
 # lastoctet=$(echo $(minikube ip) | grep -Eo "[0-9]+$")
 # lastoctet=$(($lastoctet + 1))
-# freeipstart=$(echo $(minikube ip) | sed "s/[0-9]\{3,\}$/"$lastoctet"/g")
-# freeipend=$(echo $(minikube ip) | sed "s/[0-9]\{3,\}$/"$(($lastoctet + 10))"/g")
-freeipstart=$(echo $(minikube ip) | sed -e "s/\.[0-9]\+$//").$(($(echo $(minikube ip) | grep -Eo "[0-9]+$") + 1))
+# freeipstart=$(echo $(minikube ip) | sed "s/[0-9]\{3,\}$/"0"/g")
+# freeipend=$(echo $(minikube ip) | sed "s/[0-9]\{3,\}$/"255"/g")
+# freeipstart=$(echo $(minikube ip) | sed -e "s/\.[0-9]\+$//").$(($(echo $(minikube ip) | grep -Eo "[0-9]+$") + 1))
+# freeipend=$(echo $(minikube ip) | sed -e "s/\.[0-9]\+$//").254
+
+
+freeipstart=$(echo $(minikube ip) | sed -e "s/\.[0-9]\+$/.1/")
+tillminikube=$(echo $(minikube ip) | sed -e "s/\.[0-9]\+$//").$(($(echo $(minikube ip) | grep -Eo "[0-9]+$") - 1))
+fromminikube=$(echo $(minikube ip) | sed -e "s/\.[0-9]\+$//").$(($(echo $(minikube ip) | grep -Eo "[0-9]+$") + 1))
 freeipend=$(echo $(minikube ip) | sed -e "s/\.[0-9]\+$//").254
-echo "minikube ip = $(minikube ip)\\nFirst free ip in minikube subnet = $freeipstart"
-echo "changing metallb config to working properly with random minikube ip..."
-sed -i "s/- [0-9].*$/- "$freeipstart"-"$freeipend"/g" srcs/metallb/metallb.yaml
+sed -i "s/- [0-9].*$/- "$freeipstart"-"$tillminikube"/g" srcs/metallb/metallb.yaml
+sed -i "$ s/- [0-9].*$/- "$fromminikube"-"$freeipend"/g" srcs/metallb/metallb.yaml
+
+# echo "minikube ip = $(minikube ip)\\nFirst free ip in minikube subnet = $freeipstart"
+# echo "changing metallb config to working properly with random minikube ip..."
+# sed -i "s/- [0-9].*$/- "$freeipstart"-"$freeipend"/g" srcs/metallb/metallb.yaml
 echo "iprange is now set"
 echo "set pasv_address to ftps config to support ftp join via terminal"
 sed -i "s/pasv_address=.*$/pasv_address="$freeipstart"/g" srcs/ftps/configs/vsftpd.conf

@@ -73,9 +73,9 @@ scheduler = make_pod_spec(image='daskdev/dask:latest',
 
 dask.config.set({"kubernetes.scheduler-service-type": "LoadBalancer"})
 
-cluster = KubeCluster(scheduler_pod_template=pod_spec, pod_template=scheduler, n_workers=1,
+cluster = KubeCluster(scheduler_pod_template=scheduler, pod_template=pod_spec, n_workers=1,
                       deploy_mode="remote",
-                      env={'EXTRA_PIP_PACKAGES': pip_packages}, port=8786)
+                      env={'EXTRA_PIP_PACKAGES': pip_packages}, port=8786, scheduler_service_wait_timeout=300)
 
 cluster.adapt(minimum=1, maximum=3)
 time.sleep(10)

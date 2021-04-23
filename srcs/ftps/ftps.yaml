@@ -6,7 +6,7 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:33:39 by cbach             #+#    #+#              #
-#    Updated: 2021/03/29 19:13:37 by cbach            ###   ########.fr        #
+#    Updated: 2021/04/23 16:55:10 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,10 +18,10 @@ metadata:
     app: ftps
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 1Gi
+      storage: 50Gi
 ---
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
@@ -47,6 +47,27 @@ spec:
       - name: ftps
         image: ftps
         imagePullPolicy: Never
+        env:
+          - name: FTPS_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: ftps-secret
+                key: ftps-username
+          - name: FTPS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ftps-secret
+                key: ftps-password
+          - name: FTPS_TEST_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: ftps-secret
+                key: ftps-test-username
+          - name: FTPS_TEST_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ftps-secret
+                key: ftps-test-password
         ports:
           - containerPort: 21
           - containerPort: 22800

@@ -6,7 +6,7 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:34:10 by cbach             #+#    #+#              #
-#    Updated: 2021/03/29 19:15:52 by cbach            ###   ########.fr        #
+#    Updated: 2021/04/08 18:43:09 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,10 @@ spec:
       labels:
         app: nginx
     spec:
+      volumes:
+      - name: ftps-persistent-storage
+        persistentVolumeClaim:
+          claimName: ftps-pv-claim
       containers:
       - name: nginx
         image: nginx
@@ -34,6 +38,9 @@ spec:
           - containerPort: 80
           - containerPort: 443
           - containerPort: 22
+        volumeMounts:
+        - name: ftps-persistent-storage
+          mountPath: /var/www/html/ftps_files
       nodeSelector:
         type: main
 ---

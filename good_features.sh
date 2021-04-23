@@ -1,6 +1,6 @@
 eval $(minikube docker-env)
 eval $(minikube -p minikube docker-env)
-ssh-keygen -f "/home/sfcdota/.ssh/known_hosts" -R "192.168.99.126"
+ssh-keygen -f "/home/sfcdota/.ssh/known_hosts" -R "192.168.99.2"
 ssh root@192.168.99.126 #pass root
 rewrite /phpmyadmin/(.*) /$1  break;
 
@@ -11,6 +11,7 @@ docker rm -f $(docker ps -a -q) && docker build -t nginx srcs/nginx/ && kubectl 
 
 kubectl exec -it $(kubectl get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')     -- pkill nginx
 kubectl exec -it $(kubectl get pods -o name | grep ftps) -- pkill
+kubectl delete pods --field-selector status.phase=Failed
 #ftps check connection
 nc -zv 172.17.0.2 21
 ftp 172.17.0.2

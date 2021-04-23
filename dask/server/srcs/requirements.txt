@@ -1,0 +1,4 @@
+git+https://github.com/dask/distributed@main
+git+https://github.com/dask/dask@main
+git+https://github.com/dask/dask-kubernetes@main
+graphviz

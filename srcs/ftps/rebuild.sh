@@ -1,4 +1,5 @@
 eval $(minikube docker-env)
+kubectl patch pvc ftps-pv-claim -p '{"metadata":{"finalizers": []}}' --type=merge
 kubectl delete -f ftps.yaml
 kubectl delete $(kubectl get pods -o name | grep ftps)
 docker rm -f $(docker ps -f "name=ftps" --format "{{.ID}}")

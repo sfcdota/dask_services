@@ -6,7 +6,8 @@ LABEL maintainer = "cbach"
 WORKDIR /dir/
 COPY ./srcs/ .
 RUN apt-get update -y && apt-get upgrade -y && apt-get install -y procps vim graphviz
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt && mkdir -p ~/.config/dask && \
+	mv kubernetes.yaml ~/.config/dask/kubernetes.yaml
 
 
 ENV "FTPS_DIR"="/ftps-files"

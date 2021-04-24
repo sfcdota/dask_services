@@ -1,27 +1,37 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    metallb.yaml                                       :+:      :+:    :+:    #
+#    wordpress.yaml                                     :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/12/11 13:33:53 by cbach             #+#    #+#              #
-#    Updated: 2021/04/23 23:30:21 by cbach            ###   ########.fr        #
+#    Created: 2020/12/11 13:34:30 by cbach             #+#    #+#              #
+#    Updated: 2021/04/23 23:24:56 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-apiVersion: v1
-kind: ConfigMap
+
+---
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  namespace: metallb-system
-  name: config
-data:
-  config: |
-    address-pools:
-    - name: default
-      avoid-buggy-ips: true
-      protocol: layer2
-      auto-assign: true
-      addresses:
-      - 192.168.99.2-192.168.99.168
-      - 192.168.99.170-192.168.99.254
+  name: wordpress
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+      - image: sfcdota/wordpress
+        name: wordpress
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5050
+          name: wordpress

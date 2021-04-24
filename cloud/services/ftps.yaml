@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ftps
+  annotations:
+    metallb.universe.tf/allow-shared-ip: dvadvavosem
+spec:
+  selector:
+    app: ftps
+  type: LoadBalancer
+  loadBalancerIP: 34.118.95.123
+  ports:
+    - name: ftps
+      protocol: TCP
+      port: 21
+    - name: kek
+      protocol: TCP
+      port: 32000
+    - name: kek1
+      protocol: TCP
+      port: 32001
+    - name: kek2
+      protocol: TCP
+      port: 32002
+    - name: kek3
+      protocol: TCP
+      port: 32003
+    - name: kek4
+      protocol: TCP
+      port: 32004
+    - name: kek5
+      protocol: TCP
+      port: 32005
+    - name: kek6
+      protocol: TCP
+      port: 32006

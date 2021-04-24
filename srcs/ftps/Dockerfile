@@ -6,7 +6,7 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:33:43 by cbach             #+#    #+#              #
-#    Updated: 2021/04/23 16:09:13 by cbach            ###   ########.fr        #
+#    Updated: 2021/04/24 03:15:41 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,6 @@ RUN apk update && apk upgrade && apk add --no-cache vsftpd supervisor openssl sh
 	cp vsftpd.conf /etc/vsftpd/vsftpd.conf && mv vsftpd.conf /etc/vsftpd.conf && \
 	mkdir /root/csv-files
 
-EXPOSE 21 22800 22801
+EXPOSE 21 32000-32006
 
 CMD ["/usr/bin/supervisord"]

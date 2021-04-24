@@ -1,3 +1,3 @@
 echo "$FTPS_USERNAME:$FTPS_PASSWORD" | chpasswd
-adduser -h /root/csv-files "test" -s /bin/shells
+useradd $FTPS_TEST_USERNAME -d /root/csv-files -s /bin/false -m
 echo "$FTPS_TEST_USERNAME:$FTPS_TEST_PASSWORD" | chpasswd

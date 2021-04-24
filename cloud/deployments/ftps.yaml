@@ -6,23 +6,11 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:33:39 by cbach             #+#    #+#              #
-#    Updated: 2021/04/24 03:15:05 by cbach            ###   ########.fr        #
+#    Updated: 2021/04/24 03:10:44 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: ftps-pv-claim
-  labels:
-    app: ftps
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 50Gi
----
+
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
@@ -45,8 +33,8 @@ spec:
           claimName: ftps-pv-claim
       containers:
       - name: ftps
-        image: ftps
-        imagePullPolicy: Never
+        image: sfcdota/ftps
+        imagePullPolicy: Always
         env:
           - name: FTPS_USERNAME
             valueFrom:
@@ -77,44 +65,7 @@ spec:
           - containerPort: 32004
           - containerPort: 32005
           - containerPort: 32006
+
         volumeMounts:
         - name: ftps-persistent-storage
           mountPath: /root/
-      nodeSelector:
-        type: main
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: ftps
-  annotations:
-    metallb.universe.tf/allow-shared-ip: dvadvavosem
-spec:
-  selector:
-    app: ftps
-  type: LoadBalancer
-  ports:
-    - name: ftps
-      protocol: TCP
-      port: 21
-    - name: kek
-      protocol: TCP
-      port: 32000
-    - name: kek1
-      protocol: TCP
-      port: 32001
-    - name: kek2
-      protocol: TCP
-      port: 32002
-    - name: kek3
-      protocol: TCP
-      port: 32003
-    - name: kek4
-      protocol: TCP
-      port: 32004
-    - name: kek5
-      protocol: TCP
-      port: 32005
-    - name: kek6
-      protocol: TCP
-      port: 32006

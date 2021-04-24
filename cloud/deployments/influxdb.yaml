@@ -1,0 +1,79 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    influxdb.yaml                                      :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/12/11 13:33:50 by cbach             #+#    #+#              #
+#    Updated: 2021/04/23 23:23:15 by cbach            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxdb-pv-claim
+  labels:
+    app: influxdb
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxsys-pv-claim
+  labels:
+    app: influxdb
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb
+spec:
+  selector:
+    matchLabels:
+      app: influxdb
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+      - image: sfcdota/influxdb
+        name: influxdb
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8086
+          name: influxdb
+        volumeMounts:
+        - name: influxdb-persistent-storage
+          mountPath: /root/
+        - name: influxsys-persistent-storage
+          mountPath: /sys/fs/cgroup
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
+      volumes:
+      - name: influxdb-persistent-storage
+        persistentVolumeClaim:
+          claimName: influxdb-pv-claim
+      - name: influxsys-persistent-storage
+        persistentVolumeClaim:
+          claimName: influxsys-pv-claim
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock

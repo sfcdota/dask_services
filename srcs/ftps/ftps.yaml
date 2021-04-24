@@ -6,7 +6,7 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:33:39 by cbach             #+#    #+#              #
-#    Updated: 2021/04/24 03:15:05 by cbach            ###   ########.fr        #
+#    Updated: 2021/04/24 04:02:26 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,13 +70,13 @@ spec:
                 key: ftps-test-password
         ports:
           - containerPort: 21
-          - containerPort: 32000
-          - containerPort: 32001
-          - containerPort: 32002
-          - containerPort: 32003
-          - containerPort: 32004
-          - containerPort: 32005
-          - containerPort: 32006
+          - containerPort: 37000
+          - containerPort: 37001
+          - containerPort: 37002
+          - containerPort: 37003
+          - containerPort: 37004
+          - containerPort: 37005
+          - containerPort: 37006
         volumeMounts:
         - name: ftps-persistent-storage
           mountPath: /root/
@@ -99,22 +99,22 @@ spec:
       port: 21
     - name: kek
       protocol: TCP
-      port: 32000
+      port: 37000
     - name: kek1
       protocol: TCP
-      port: 32001
+      port: 37001
     - name: kek2
       protocol: TCP
-      port: 32002
+      port: 37002
     - name: kek3
       protocol: TCP
-      port: 32003
+      port: 37003
     - name: kek4
       protocol: TCP
-      port: 32004
+      port: 37004
     - name: kek5
       protocol: TCP
-      port: 32005
+      port: 37005
     - name: kek6
       protocol: TCP
-      port: 32006
+      port: 37006

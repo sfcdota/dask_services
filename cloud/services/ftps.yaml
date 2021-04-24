@@ -15,22 +15,22 @@ spec:
       port: 21
     - name: kek
       protocol: TCP
-      port: 32000
+      port: 37000
     - name: kek1
       protocol: TCP
-      port: 32001
+      port: 37001
     - name: kek2
       protocol: TCP
-      port: 32002
+      port: 37002
     - name: kek3
       protocol: TCP
-      port: 32003
+      port: 37003
     - name: kek4
       protocol: TCP
-      port: 32004
+      port: 37004
     - name: kek5
       protocol: TCP
-      port: 32005
+      port: 37005
     - name: kek6
       protocol: TCP
-      port: 32006
+      port: 37006

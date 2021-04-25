@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpmyadmin
+  annotations:
+    metallb.universe.tf/allow-shared-ip: dvadvavosem
+spec:
+  ports:
+    - port: 5000
+      protocol: TCP
+  selector:
+    app: phpmyadmin
+  type: LoadBalancer
+  loadBalancerIP: 34.116.235.52
+  externalIPs:
+    - 34.116.235.52

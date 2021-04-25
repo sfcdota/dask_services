@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: generator
+spec:
+  selector:
+    app: generator
+  ports:
+    - name: generator
+      protocol: TCP
+      port: 30010

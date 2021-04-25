@@ -6,7 +6,7 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:34:27 by cbach             #+#    #+#              #
-#    Updated: 2021/01/29 15:06:58 by cbach            ###   ########.fr        #
+#    Updated: 2021/04/25 14:42:40 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,9 +22,12 @@ RUN apk update && apk upgrade && apk add --no-cache wget nginx php7 php7-common 
 	php7-ldap php7-ctype php7-dom php7-fpm php7-opcache php7-zlib supervisor && mkdir -p /run/nginx /var/www/html && \
 	mv localhost /etc/nginx/conf.d/default.conf && mv supervisord.conf /etc/supervisord.conf && \
 	sed -i 's/daemonize = yes/daemonize = no/g' /etc/php7/php-fpm.conf
-RUN wget http://wordpress.org/latest.tar.gz && tar zxf latest.tar.gz && rm latest.tar.gz && \
+RUN tar zxf latest.tar.gz && rm latest.tar.gz && \
 	cp -r wordpress/* /var/www/html && mv wp-config.php /var/www/html
 
 EXPOSE 5050
 
 CMD ["/usr/bin/supervisord"]
+
+
+# wget http://wordpress.org/latest.tar.gz

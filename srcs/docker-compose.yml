@@ -1,0 +1,44 @@
+version: "3.9"
+services:
+  client:
+    build: client
+    image: sfcdota/client
+    depends_on:
+      - server
+  ftps:
+    build: ftps
+    image: sfcdota/ftps
+  generator:
+    build: generator
+    image: sfcdota/generator
+    depends_on:
+      - client
+  grafana:
+    build: grafana
+    image: sfcdota/grafana
+    depends_on:
+      - influxdb
+  influxdb:
+    build: influxdb
+    image: sfcdota/influxdb
+  mysql:
+    build: mysql
+    image: sfcdota/mysql
+  nginx:
+    build: nginx
+    image: sfcdota/nginx
+    depends_on:
+      - ftps
+  phpmyadmin:
+    build: phpmyadmin
+    image: sfcdota/phpmyadmin
+    depends_on:
+      - mysql
+  server:
+    build: server
+    image: sfcdota/server
+  wordpress:
+    build: wordpress
+    image: sfcdota/wordpress
+    depends_on:
+      - mysql

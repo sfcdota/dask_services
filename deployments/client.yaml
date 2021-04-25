@@ -1,0 +1,42 @@
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: client-pv-claim
+#   labels:
+#     app: client
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 1Gi
+# ---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: client
+spec:
+  selector:
+    matchLabels:
+      app: client
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      volumes:
+      - name: client-persistent-storage
+        persistentVolumeClaim:
+          claimName: client-pv-claim
+      containers:
+      - name: client
+        image: sfcdota/client
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 30001
+        volumeMounts:
+        - name: client-persistent-storage
+          mountPath: /client-files/

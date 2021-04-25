@@ -6,7 +6,7 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:34:08 by cbach             #+#    #+#              #
-#    Updated: 2021/01/28 13:44:59 by cbach            ###   ########.fr        #
+#    Updated: 2021/04/25 13:46:06 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ FROM alpine:3.12
 LABEL maintainer = "cbach"
 
 WORKDIR /dir/
-COPY ./configs .
+COPY ./srcs .
 
 RUN apk update && apk upgrade && apk add --no-cache  nginx openssh openssl openrc supervisor && \
 	mkdir -p /run/nginx /var/run/sshd /var/log/supervisor /var/www/html && mv sshd_config /etc/ssh/sshd_config && \

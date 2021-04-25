@@ -1,0 +1,77 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    ftps.yaml                                          :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/12/11 13:33:39 by cbach             #+#    #+#              #
+#    Updated: 2021/04/25 13:05:59 by cbach            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: ftps
+spec:
+  selector:
+    matchLabels:
+      app: ftps
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ftps
+    spec:
+      volumes:
+      - name: ftps-persistent-storage
+        persistentVolumeClaim:
+          claimName: ftps-pv-claim
+      containers:
+      - name: ftps
+        image: sfcdota/ftps
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: FTPS_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: ftps-secret
+                key: ftps-username
+          - name: FTPS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ftps-secret
+                key: ftps-password
+          - name: FTPS_TEST_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: ftps-secret
+                key: ftps-test-username
+          - name: FTPS_TEST_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ftps-secret
+                key: ftps-test-password
+          - name: FTPS_MY_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: ftps-secret
+                key: ftps-my-password
+          - name: FTPS_MY_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ftps-secret
+                key: ftps-my-username
+        ports:
+          - containerPort: 35000
+          - containerPort: 35001
+          - containerPort: 35002
+          - containerPort: 20
+          - containerPort: 21
+        volumeMounts:
+        - name: ftps-persistent-storage
+          mountPath: /root/

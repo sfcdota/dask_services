@@ -105,8 +105,8 @@ CREATE TABLE `wp_options` (
 --
 
 INSERT INTO `wp_options` (`option_id`, `option_name`, `option_value`, `autoload`) VALUES
-(1, 'siteurl', 'http://34.118.95.123:5050', 'yes'),
-(2, 'home', 'http://34.118.95.123:5050', 'yes'),
+(1, 'siteurl', 'http://34.116.235.52:5050', 'yes'),
+(2, 'home', 'http://34.116.235.52:5050', 'yes'),
 (3, 'blogname', 'cbach', 'yes'),
 (4, 'blogdescription', 'Just another WordPress site', 'yes'),
 (5, 'users_can_register', '0', 'yes'),
@@ -307,8 +307,8 @@ CREATE TABLE `wp_posts` (
 --
 
 INSERT INTO `wp_posts` (`ID`, `post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_title`, `post_excerpt`, `post_status`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_content_filtered`, `post_parent`, `guid`, `menu_order`, `post_type`, `post_mime_type`, `comment_count`) VALUES
-(1, 1, '2021-01-29 12:08:19', '2021-01-29 12:08:19', '<!-- wp:paragraph -->\n<p>Welcome to WordPress. This is your first post. Edit or delete it, then start writing!</p>\n<!-- /wp:paragraph -->', 'Hello world!', '', 'publish', 'open', 'open', '', 'hello-world', '', '', '2021-01-29 12:08:19', '2021-01-29 12:08:19', '', 0, 'http://34.118.95.123:5050/?p=1', 0, 'post', '', 1),
-(2, 1, '2021-01-29 12:08:55', '0000-00-00 00:00:00', '', 'Auto Draft', '', 'auto-draft', 'open', 'open', '', '', '', '', '2021-01-29 12:08:55', '0000-00-00 00:00:00', '', 0, 'http://34.118.95.123:5050/?p=4', 0, 'post', '', 0);
+(1, 1, '2021-01-29 12:08:19', '2021-01-29 12:08:19', '<!-- wp:paragraph -->\n<p>Welcome to WordPress. This is your first post. Edit or delete it, then start writing!</p>\n<!-- /wp:paragraph -->', 'Hello world!', '', 'publish', 'open', 'open', '', 'hello-world', '', '', '2021-01-29 12:08:19', '2021-01-29 12:08:19', '', 0, 'http://34.116.235.52:5050/?p=1', 0, 'post', '', 1),
+(2, 1, '2021-01-29 12:08:55', '0000-00-00 00:00:00', '', 'Auto Draft', '', 'auto-draft', 'open', 'open', '', '', '', '', '2021-01-29 12:08:55', '0000-00-00 00:00:00', '', 0, 'http://34.116.235.52:5050/?p=4', 0, 'post', '', 0);
 
 -- --------------------------------------------------------
 
@@ -501,7 +501,7 @@ CREATE TABLE `wp_users` (
 --
 
 INSERT INTO `wp_users` (`ID`, `user_login`, `user_pass`, `user_nicename`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `display_name`) VALUES
-(1, 'cbach', '$P$BqWq48B0t1PAU0h7i50s0zm283uYWO1', 'cbach', 'cbach@cbach.cbach', 'http://34.118.95.123:5050', '2021-01-29 12:08:19', '', 0, 'cbach'),
+(1, 'cbach', '$P$BqWq48B0t1PAU0h7i50s0zm283uYWO1', 'cbach', 'cbach@cbach.cbach', 'http://34.116.235.52:5050', '2021-01-29 12:08:19', '', 0, 'cbach'),
 (2, 'test', '$P$BQ19vUlEDKgXEhgSqhyoKYeaqLaLao.', 'test', 'test@test.test', '', '2021-01-29 12:09:12', '1611922152:$P$BCSb32692jf1qqN2EZ9Q0EVviY22fa1', 0, 'test'),
 (3, 'test2', '$P$BX/CUd5xekJ7Txb3/Ubv2y3KIkwT0L0', 'test2', 'test2@test2.test2', '', '2021-01-29 12:09:21', '1611922161:$P$BZO1Wpjp4HhEv3mxsTZ9/TFQ6S8hZ21', 0, 'test2'),
 (4, 'test3', '$P$B/1J1rqYk4YFwzHSxRkGoYZeZe1Rqu.', 'test3', 'test3@test3.test3', '', '2021-01-29 12:09:37', '1611922177:$P$B9RSjrVDsUpSBPImKvUKoeboizCiwU.', 0, 'test3'),

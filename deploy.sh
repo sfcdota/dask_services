@@ -39,17 +39,11 @@ kubectl apply -f $SERVICES_DIR
 
 docker-compose -f $SRCS_DIR/docker-compose.yml build --parallel
 
-docker push $DOCKER_USER/nginx
-docker push $DOCKER_USER/phpmyadmin
-docker push $DOCKER_USER/ftps
-docker push $DOCKER_USER/mysql
-docker push $DOCKER_USER/wordpress
-docker push $DOCKER_USER/grafana
-docker push $DOCKER_USER/influxdb
-docker push $DOCKER_USER/server
-docker push $DOCKER_USER/client
-docker push $DOCKER_USER/generator
+
+cd srcs
+docker-compose push
+cd ..
 
 
-kubectl apply -f cloud/deployments
+kubectl apply -f $DEPLOYMENTS_DIR
 

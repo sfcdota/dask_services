@@ -21,14 +21,14 @@ spec:
       containers:
       - name: generator
         image: sfcdota/generator
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         resources:
           requests:
-            memory: "0.5G"
-            cpu: "0.5"
+            memory: "64Mi"
+            cpu: "100m"
           limits:
-            memory: "1G"
-            cpu: "1"
+            memory: "1Gi"
+            cpu: "100m"
         ports:
           - containerPort: 30010
         volumeMounts:

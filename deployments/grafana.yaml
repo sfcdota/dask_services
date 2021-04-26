@@ -6,7 +6,7 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:33:36 by cbach             #+#    #+#              #
-#    Updated: 2021/04/25 13:06:05 by cbach            ###   ########.fr        #
+#    Updated: 2021/04/26 00:12:02 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,13 @@ spec:
       containers:
       - name: grafana
         image: sfcdota/grafana
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "100m"
         ports:
           - containerPort: 3000

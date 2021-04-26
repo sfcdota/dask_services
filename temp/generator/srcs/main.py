@@ -116,7 +116,7 @@ while True:
 				"Mark": numpy.random.choice(marks, p=[0.1, 0.25, 0.4, 0.25], size=dif_size),
 				"Date": numpy.random.choice(days_range, size=dif_size)}
 			).to_csv(path, mode='a', index=False, header=(True if _ == 0 else False))
-			print(f"Iterations #{_}. Around extra ~ 0.0625GB of csv generated. File size now ~ {_ * 0.0625}")
+			print(f"Iterations #{_}. Around extra ~ 0.0625GB of csv generated. File size now ~ {(_ + 1) * 0.0625}")
 		print(f"{get_file_size_GB(path)}GB {path} generated in {time.monotonic() - start_time} seconds")
 	except:
 		os.remove(path)

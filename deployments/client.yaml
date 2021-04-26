@@ -28,15 +28,22 @@ spec:
         app: client
     spec:
       volumes:
-      - name: client-persistent-storage
+      - name: ftps-persistent-storage
         persistentVolumeClaim:
-          claimName: client-pv-claim
+          claimName: ftps-pv-claim
       containers:
       - name: client
         image: sfcdota/client
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
         ports:
           - containerPort: 30001
         volumeMounts:
-        - name: client-persistent-storage
-          mountPath: /client-files/
+        - name: ftps-persistent-storage
+          mountPath: /ftps-files/

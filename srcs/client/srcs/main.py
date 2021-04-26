@@ -1,4 +1,3 @@
-import dask.distributed
 from dask.distributed import Client
 import dask.dataframe as dd
 from pathlib import Path
@@ -47,9 +46,18 @@ def check_for_new_files(log, queue):
 def calculation(file_path, log, results_path, client, filename):
     df = None
     result = None
+    result_dir = f"{results_path}/{filename[:-4]}-result"
     try:
         write_log(f"Trying to execute {file_path}", log)
-        df = dd.read_csv(f"{file_path}", blocksize="64MB")
+        try:
+            df = dd.read_csv(f"{file_path}", blocksize="64MB", error_bad_lines=False, encodings='utf-8')
+        except BaseException:
+            True
+        try:
+            df = dd.read_csv(f"{file_path}", blocksize="64MB", error_bad_lines=False, compression='xz')
+        except BaseException:
+            True
+        df["Mark"] = dd.to_numeric(df["Mark"], errors='coerce')
     except BaseException as e:
         write_log(f"Error on read_csv func. CSV file might be damaged. Error description : {e}", log)
         write_log(f"Deleting errored csv files...", log)
@@ -62,13 +70,15 @@ def calculation(file_path, log, results_path, client, filename):
         return 1
     try:
         df = df.groupby(["Name", "Subject"]).mean()
-        Path(f"{results_path}/{filename[:-4]}-result").mkdir(parents=True, exist_ok=True)
-        df.visualize(f"{results_path}/{filename}/visualized")
+        Path(result_dir).mkdir(parents=True, exist_ok=True)
+        # df.visualize(f"{result_dir}/visualized")
         result = client.compute(df, sync=True)
     except BaseException as e:
         write_log(f"Error on computation. Check the source code. Error description: {e}", log)
+        client.cancel([result, df], force=True)
+        client.restart()
         return 1
-    result.to_csv(f"{results_path}/{filename}/result.txt", mode='w', encoding='utf-8')
+    result.to_csv(f"{result_dir}/result.csv", mode='w', encoding='utf-8')
     # with open(f"{results_path}/{filename}/result.txt", "w") as file:
     #     file.write(f"{result}{os.linesep}")
     write_log(f"{file_path} execution successful. Result = {result}", log)
@@ -129,6 +139,8 @@ def init_directories():
 
 ftps_dir, csv_dir, system_dir, results_dir, cluster_dir = init_directories()
 
+
+print("PROCESS STARTED. TRYING TO CREATE LOG FILE")
 
 with open(f"{system_dir}/.logs/{get_current_time()}", "w") as log:
     write_log("Log created.", log)

@@ -6,7 +6,7 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:34:00 by cbach             #+#    #+#              #
-#    Updated: 2021/04/25 13:06:17 by cbach            ###   ########.fr        #
+#    Updated: 2021/04/26 00:12:06 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,14 @@ spec:
       containers:
       - image: sfcdota/mysql
         name: mysql
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "100m"
         ports:
         - containerPort: 3306
           name: mysql

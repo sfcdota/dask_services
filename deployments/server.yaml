@@ -19,10 +19,18 @@ spec:
       - name: ftps-persistent-storage
         persistentVolumeClaim:
           claimName: ftps-pv-claim
+      terminationGracePeriodSeconds: 180
       containers:
       - name: server
         image: sfcdota/server
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "100m"
         ports:
           - containerPort: 30000
         volumeMounts:

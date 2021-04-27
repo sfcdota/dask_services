@@ -5,19 +5,13 @@ import os
 import datetime
 import time
 
+
+
 def get_current_time():
     return datetime.datetime.fromtimestamp(time.time())
 
 
-def write_log(msg, fd, time=True):
-    timestamp = ""
-    if time:
-        timestamp = get_current_time()
-    print(f"{timestamp}\t{msg}")
-    fd.write(f"{timestamp}\t{msg}{os.linesep}")
-
-
-def check_for_new_files(log, queue):
+def check_for_new_files(queue):
     count = 0
     csv_is_found = False
     while not csv_is_found:
@@ -29,96 +23,88 @@ def check_for_new_files(log, queue):
             try:
                 os.rename(file_path, file_path)
             except OSError:
-                write_log(f"New file {_} is found, but it is not fully copied or damaged. \
-                    Wait for next iteration...", log)
+                print(f"New file {_} is found, but it is not fully copied or damaged. \
+                    Wait for next iteration...")
                 continue
-            if ".csv" in _ and "custom" not in _:
+            if "custom" not in _ and ".csv" in _ or ".xz" in _ or ".zip" in _ or ".gzip" in _ or ".bz2" in _:
                 csv_is_found = True
                 if _ not in queue:
                     queue.add(_)
                     count += 1
-        write_log(f"checking new csv files... Now queue = {queue if queue else None}. \
-            New {count} files. Remain {len(queue)} files", log)
-        time.sleep(3.0)
+        print(f"{get_current_time()}checking new csv files... Now queue = {queue if queue else None}. \
+            New {count} files. Remain {len(queue)} files")
+        time.sleep(10.0)
 
 
 
-def calculation(file_path, log, results_path, client, filename):
-    df = None
+def calculation(file_path, results_path, client, filename):
     result = None
-    result_dir = f"{results_path}/{filename[:-4]}-result"
+    file_name_part = filename[:-4]
+    result_dir = f"{results_path}/{file_name_part}-result"
+    df = dd.DataFrame
     try:
-        write_log(f"Trying to execute {file_path}", log)
-        try:
-            df = dd.read_csv(f"{file_path}", blocksize="64MB", error_bad_lines=False, encodings='utf-8')
-        except BaseException:
-            True
-        try:
-            df = dd.read_csv(f"{file_path}", blocksize="64MB", error_bad_lines=False, compression='xz')
-        except BaseException:
-            True
+        print(f"{get_current_time()}\tTrying to execute {file_path}")
+        df = dd.read_csv(f"{file_path}", blocksize="64MB", error_bad_lines=False, names=fieldnames)
         df["Mark"] = dd.to_numeric(df["Mark"], errors='coerce')
     except BaseException as e:
-        write_log(f"Error on read_csv func. CSV file might be damaged. Error description : {e}", log)
-        write_log(f"Deleting errored csv files...", log)
-        write_log(f"******************SCHEDULER LOGS******************\n\n\n", log)
-        for _ in client.get_scheduler_logs(10):
-            write_log(f"_{os.linesep}", log, False)
-        write_log(f"******************WORKER LOGS******************\n\n\n", log)
-        for _ in client.get_worker_logs(10):
-            write_log(f"_{os.linesep}", log, False)
+        print(f"{get_current_time()}\tError on read_csv func. CSV file might be damaged. Error description : {e}")
+        # print(f"******************SCHEDULER LOGS******************\n\n\n")
+        # for _ in client.get_scheduler_logs(5):
+        #     print(f"_{os.linesep}")
+        # print(f"******************WORKER LOGS******************\n\n\n")
+        # for _ in client.get_worker_logs(5):
+        #     print(f"_{os.linesep}")
         return 1
     try:
         df = df.groupby(["Name", "Subject"]).mean()
         Path(result_dir).mkdir(parents=True, exist_ok=True)
-        # df.visualize(f"{result_dir}/visualized")
         result = client.compute(df, sync=True)
     except BaseException as e:
-        write_log(f"Error on computation. Check the source code. Error description: {e}", log)
+        print(f"{get_current_time()}\tError on computation. Check the source code. Error description: {e}")
         client.cancel([result, df], force=True)
         client.restart()
         return 1
-    result.to_csv(f"{result_dir}/result.csv", mode='w', encoding='utf-8')
-    # with open(f"{results_path}/{filename}/result.txt", "w") as file:
-    #     file.write(f"{result}{os.linesep}")
-    write_log(f"{file_path} execution successful. Result = {result}", log)
+    for _ in compression_types:
+        if _ == filename[-len(_):] or _ == "csv":
+            result.to_csv(f"{result_dir}/result.{_}", mode='w', encoding='utf-8')
+    print(f"{file_path} execution successful. Result = {result}")
     return 0
 
 
-def execute(log, ftps_path, results_path, client):
+def execute(ftps_path, results_path, client):
     queue = set()
     while True:
-        check_for_new_files(log, queue)
+        check_for_new_files(queue)
         if queue:
             file_to_handle = queue.pop()
         else:
             time.sleep(3.0)
             continue
         file_path = f"{ftps_path}/{file_to_handle}"
-        if calculation(file_path, log, results_path, client, file_to_handle) == 0:
+        if calculation(file_path, results_path, client, file_to_handle) == 0:
             os.remove(file_path)
         else:
             return 1
         time.sleep(3.0)
 
 
-def get_scheduler_address(log):
+def get_scheduler_address():
     while True:
         try:
-            write_log(f"Trying to find .scheduler file in{cluster_dir}...", log)
+            print(f"Trying to find .scheduler file in{cluster_dir}...")
             files = os.listdir(cluster_dir)
-            write_log(f"Found files: {files}", log)
+            print(f"Found files: {files}")
             for _ in files:
                 print(f"{cluster_dir}/{_}")
                 if _ == ".scheduler":
-                    write_log("trying to read .scheduler file", log)
+                    print("trying to read .scheduler file")
                     with open(f"{cluster_dir}/{_}", "r") as scheduler:
                         address = scheduler.readline()
-                        write_log(f"Scheduler address = {address}", log)
+                        print(f"Scheduler address = {address}")
                         return address
         except OSError:
-            write_log("scheduler file not found", log)
-        time.sleep(3.0)
+            print("scheduler file not found")
+        time.sleep(10.0)
 
 
 def init_directories():
@@ -133,29 +119,24 @@ def init_directories():
     Path(f"{results}").mkdir(parents=True, exist_ok=True)
     Path(f"{system}").mkdir(parents=True, exist_ok=True)
     Path(f"{scheduler_file}").mkdir(parents=True, exist_ok=True)
-    Path(f"{system}/.logs").mkdir(parents=True, exist_ok=True)
     return ftps, csv, system, results, scheduler_file
 
 
 ftps_dir, csv_dir, system_dir, results_dir, cluster_dir = init_directories()
+fieldnames = ["Name", "Subject", "Mark", "Date"]
+compression_types = ['zip', 'bz2', 'gzip', 'xz', 'csv']
 
-
-print("PROCESS STARTED. TRYING TO CREATE LOG FILE")
-
-with open(f"{system_dir}/.logs/{get_current_time()}", "w") as log:
-    write_log("Log created.", log)
-    while True:
-        try:
-            client = Client(get_scheduler_address(log))
-            with open(f"{cluster_dir}/.dashboard", "r") as dashboard:
-                address = dashboard.readline()
-                write_log(f"dashboard address = {address}", log)
-        except OSError:
-            write_log("Scheduler is not ready. Time out to connect. Be sure it's not shut downed.", log)
-            time.sleep(3.0)
-            continue
+print("PROCESS STARTED. TRYING TO CONNECT SCHEDULER")
+client = None
+while True:
+    try:
+        client = Client(get_scheduler_address())
         client.get_versions(check=True)
-        if execute(log, csv_dir, results_dir, client) == 0:
+        if execute(csv_dir, results_dir, client) == 0:
             time.sleep(3.0)
         else:
-            time.sleep(60)
+            time.sleep(20)
+    except OSError:
+        print("Scheduler is not ready. Time out to connect. Be sure it's not shut downed.")
+        time.sleep(10.0)
+

@@ -19,7 +19,7 @@ spec:
       - name: ftps-persistent-storage
         persistentVolumeClaim:
           claimName: ftps-pv-claim
-      terminationGracePeriodSeconds: 180
+      terminationGracePeriodSeconds: 60
       containers:
       - name: server
         image: sfcdota/server
@@ -27,9 +27,9 @@ spec:
         resources:
           requests:
             memory: "64Mi"
-            cpu: "100m"
+            cpu: "10m"
           limits:
-            memory: "1Gi"
+            memory: "128Mi"
             cpu: "100m"
         ports:
           - containerPort: 30000

@@ -6,7 +6,7 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:34:00 by cbach             #+#    #+#              #
-#    Updated: 2021/04/26 00:12:06 by cbach            ###   ########.fr        #
+#    Updated: 2021/04/26 04:50:18 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,9 +59,9 @@ spec:
         resources:
           requests:
             memory: "64Mi"
-            cpu: "100m"
+            cpu: "10m"
           limits:
-            memory: "1Gi"
+            memory: "128Mi"
             cpu: "100m"
         ports:
         - containerPort: 3306

@@ -6,7 +6,7 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:33:39 by cbach             #+#    #+#              #
-#    Updated: 2021/04/26 00:11:58 by cbach            ###   ########.fr        #
+#    Updated: 2021/04/26 04:50:37 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,9 +38,9 @@ spec:
         resources:
           requests:
             memory: "64Mi"
-            cpu: "100m"
+            cpu: "10m"
           limits:
-            memory: "1Gi"
+            memory: "512Mi"
             cpu: "500m"
         env:
           - name: FTPS_USERNAME

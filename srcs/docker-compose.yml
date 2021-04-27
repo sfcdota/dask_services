@@ -8,11 +8,11 @@ services:
   ftps:
     build: ftps
     image: sfcdota/ftps
-  generator:
-    build: generator
-    image: sfcdota/generator
-    depends_on:
-      - client
+#   generator:
+#     build: generator
+#     image: sfcdota/generator
+#     depends_on:
+#       - client
   grafana:
     build: grafana
     image: sfcdota/grafana

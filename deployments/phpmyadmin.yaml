@@ -6,7 +6,7 @@
 #    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/11 13:34:19 by cbach             #+#    #+#              #
-#    Updated: 2021/04/26 00:12:12 by cbach            ###   ########.fr        #
+#    Updated: 2021/04/26 04:50:10 by cbach            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,10 +34,10 @@ spec:
         imagePullPolicy: Always
         resources:
           requests:
-            memory: "128Mi"
-            cpu: "100m"
+            memory: "64Mi"
+            cpu: "10m"
           limits:
-            memory: "1Gi"
+            memory: "128Mi"
             cpu: "100m"
         ports:
         - containerPort: 5000

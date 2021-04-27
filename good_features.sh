@@ -1,3 +1,6 @@
+gcloud container clusters resize cluster-2 --num-nodes=0 --zone=europe-central2-b
+
+
 kubectl delete pods --field-selector status.phase=Failed
 sudo swapoff -a
 

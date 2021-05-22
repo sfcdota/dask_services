@@ -65,7 +65,7 @@ def calculation(file_path, results_path, client, filename):
         client.restart()
         return 1
     for _ in compression_types:
-        if _ == filename[-len(_):] or _ == "csv":
+        if f"to_{_}" == file_name_part[-len(_) - 3:] or _ == "csv":
             result.to_csv(f"{result_dir}/result.{_}", mode='w', encoding='utf-8')
     print(f"{file_path} execution successful. Result = {result}")
     return 0

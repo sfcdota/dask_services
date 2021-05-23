@@ -1,3 +1,8 @@
+#
+# Copyright (c) 2021 Maxim Gazizov All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
 openrc default
 service mariadb setup
 cp mariadb-server.cnf /etc/my.cnf.d/mariadb-server.cnf

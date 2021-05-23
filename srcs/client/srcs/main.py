@@ -1,3 +1,8 @@
+#
+# Copyright (c) 2021 Maxim Gazizov All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
 from dask.distributed import Client
 import dask.dataframe as dd
 from pathlib import Path

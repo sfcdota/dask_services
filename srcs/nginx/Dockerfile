@@ -1,19 +1,4 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Dockerfile                                         :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/12/11 13:34:08 by cbach             #+#    #+#              #
-#    Updated: 2021/04/25 13:46:06 by cbach            ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 FROM alpine:3.12
-
-LABEL maintainer = "cbach"
-
 WORKDIR /dir/
 COPY ./srcs .
 
@@ -23,7 +8,7 @@ RUN apk update && apk upgrade && apk add --no-cache  nginx openssh openssl openr
 	chown -R 777 /var/www/html/ && \
 	openssl req -x509 -nodes -newkey rsa:2048 \
 	-keyout /etc/ssl/certs/localhost.key -out /etc/ssl/certs/localhost.pem \
-	-subj "/C=RU/ST=Kazan/L=Kazan/O=21School/OU=cbach/CN=localhost" && \
+	-subj "/C=RU/ST=Kazan/L=Kazan/O=KPFU/OU=sfcdota/CN=localhost" && \
 	rc-update add sshd && rc-update add nginx && \
 	ssh-keygen -A && rc-status && touch /run/openrc/softlevel && \
 	echo "root:root" | chpasswd

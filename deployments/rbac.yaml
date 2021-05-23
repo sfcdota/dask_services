@@ -6,7 +6,7 @@ metadata:
   namespace: default
 rules:
 - apiGroups:
-  - ""  # indicates the core API group
+  - ""
   resources:
   - "pods"
   - "pods/portforward"
@@ -17,14 +17,14 @@ rules:
   - "create"
   - "delete"
 - apiGroups:
-  - ""  # indicates the core API group
+  - ""
   resources:
   - "pods/log"
   verbs:
   - "get"
   - "list"
 - apiGroups:
-  - "" # indicates the core API group
+  - ""
   resources:
   - "services"
   verbs:
@@ -34,7 +34,7 @@ rules:
   # - "create"
   # - "delete"
 - apiGroups:
-  - "policy"  # indicates the policy API group
+  - "policy"
   resources:
   - "poddisruptionbudgets"
   verbs:
@@ -44,7 +44,7 @@ rules:
   # - "create"
   # - "delete"
 - apiGroups:
-  - ""  # indicates the core API group
+  - ""
   resources:
   - "nodes"
   verbs:

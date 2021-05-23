@@ -98,7 +98,7 @@ fieldnames = ["Name", "Subject", "Mark", "Date"]
 rows = random.randint(10 ** 10, 10 ** 15)
 
 dif_size = 10 ** 6  # is about 0.0625GB
-wanted_size = random.randint(1, 4)
+wanted_size = random.randint(1, 10)
 iterations = 1 / 0.0625
 
 # path = filename
@@ -112,7 +112,7 @@ while True:
 		for _ in range(round(iterations * wanted_size)):
 			pd.DataFrame({
 				"Name": numpy.random.choice(scholar_names, size=dif_size),
-				"Subject": numpy.random.choice(subjects, size=dif_size),
+				"Subject": numpy.random.choice(subjects, p=percentile, size=dif_size),
 				"Mark": numpy.random.choice(marks, p=[0.1, 0.25, 0.4, 0.25], size=dif_size),
 				"Date": numpy.random.choice(days_range, size=dif_size)}
 			).to_csv(path, mode='a', index=False, header=(True if _ == 0 else False))
@@ -121,5 +121,5 @@ while True:
 	except:
 		os.remove(path)
 		exit(1)
-	time.sleep(300)
+	time.sleep(600)
 

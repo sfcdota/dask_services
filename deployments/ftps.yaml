@@ -1,17 +1,4 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    ftps.yaml                                          :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: cbach <cbach@student.42.fr>                +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/12/11 13:33:39 by cbach             #+#    #+#              #
-#    Updated: 2021/04/26 04:50:37 by cbach            ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ftps

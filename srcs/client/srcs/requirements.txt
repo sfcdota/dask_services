@@ -1,4 +1,0 @@
-git+https://github.com/dask/distributed@main
-git+https://github.com/dask/dask@main
-git+https://github.com/sfcdota/dask-kubernetes@main
-graphviz

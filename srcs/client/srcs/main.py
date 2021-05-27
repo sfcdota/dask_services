@@ -31,7 +31,7 @@ def check_for_new_files(queue):
                 print(f"New file {_} is found, but it is not fully copied or damaged. \
                     Wait for next iteration...")
                 continue
-            if "custom" not in _ and ".csv" in _ or ".xz" in _ or ".zip" in _ or ".gzip" in _ or ".bz2" in _:
+            if "custom" not in _ and (".csv" in _ or ".xz" in _ or ".zip" in _ or ".gzip" in _ or ".bz2" in _):
                 csv_is_found = True
                 if _ not in queue:
                     queue.add(_)
@@ -46,6 +46,7 @@ def calculation(file_path, results_path, client, filename):
     result = None
     file_name_part = filename[:-4]
     result_dir = f"{results_path}/{file_name_part}-result"
+    start_time = time.monotonic()
     df = dd.DataFrame
     try:
         print(f"{get_current_time()}\tTrying to execute {file_path}")
@@ -53,12 +54,6 @@ def calculation(file_path, results_path, client, filename):
         df["Mark"] = dd.to_numeric(df["Mark"], errors='coerce')
     except BaseException as e:
         print(f"{get_current_time()}\tError on read_csv func. CSV file might be damaged. Error description : {e}")
-        # print(f"******************SCHEDULER LOGS******************\n\n\n")
-        # for _ in client.get_scheduler_logs(5):
-        #     print(f"_{os.linesep}")
-        # print(f"******************WORKER LOGS******************\n\n\n")
-        # for _ in client.get_worker_logs(5):
-        #     print(f"_{os.linesep}")
         return 1
     try:
         df = df.groupby(["Name", "Subject"]).mean()
@@ -72,7 +67,10 @@ def calculation(file_path, results_path, client, filename):
     for _ in compression_types:
         if f"to_{_}" == file_name_part[-len(_) - 3:] or _ == "csv":
             result.to_csv(f"{result_dir}/result.{_}", mode='w', encoding='utf-8')
-    print(f"{file_path} execution successful. Result = {result}")
+    elapsed_time = time.monotonic() - start_time
+    print(f"{file_path} execution successful. Result = {result}. Elapsed time = {elapsed_time}")
+    with open(f"{result_dir}/result_time.txt", "w") as e:
+        e.write(str(elapsed_time))
     return 0
 
 
@@ -87,7 +85,10 @@ def execute(ftps_path, results_path, client):
             continue
         file_path = f"{ftps_path}/{file_to_handle}"
         if calculation(file_path, results_path, client, file_to_handle) == 0:
-            os.remove(file_path)
+            if "delete" in file_path:
+                os.remove(file_path)
+            elif "continue" not in file_path:
+                time.sleep(60)
         else:
             return 1
         time.sleep(3.0)
@@ -135,7 +136,7 @@ print("PROCESS STARTED. TRYING TO CONNECT SCHEDULER")
 client = None
 while True:
     try:
-        client = Client(get_scheduler_address())
+        client = Client("tcp://dask:8786")
         client.get_versions(check=True)
         if execute(csv_dir, results_dir, client) == 0:
             time.sleep(3.0)

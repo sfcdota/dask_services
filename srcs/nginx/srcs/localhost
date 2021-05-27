@@ -9,7 +9,7 @@ server {
 	listen [::]:443 ssl;
 	ssl_certificate /etc/ssl/certs/localhost.pem;
 	ssl_certificate_key /etc/ssl/certs/localhost.key;
-	root /var/www/html/;
+	root /ftps-files/csv-files/;
 	index index.php index.html index.htm;
 	autoindex on;
 	location /

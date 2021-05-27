@@ -3,6 +3,9 @@ server {
 	listen [::]:5050;
 	root /var/www/html/;
 	index index.php;
+	location / {
+		autoindex on;
+	}
 	location ~ \.php$ {
     	include fastcgi_params;
     	fastcgi_intercept_errors on;

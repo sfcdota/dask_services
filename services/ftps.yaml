@@ -1,30 +1,313 @@
+# apiVersion: v1 #версия API для Service
+# kind: Service #тип объекта
+# metadata: #мета информация объекта
+#   name: ftps #имя объекта
+#   annotations: #аннотация для разделения адреса в MetalLB
+#     metallb.universe.tf/allow-shared-ip: dvadvavosem #произвольное значение
+# spec: #спецификация желаемого состояние сервиса
+#   selector: #селектор
+#     app: ftps #по метке app:ftps
+#   type: LoadBalancer #тип сервиса как балансировщик нагрузки
+#   loadBalancerIP: 34.116.235.52
+#   externalIPs: [34.116.235.52]
+#   ports: #массив портов сервиса
+#     - name: ftps #имя порта
+#       protocol: TCP #протокол
+#       port: 20 #внешний порт, по умолчанию targetPort имеет это же значение
+#     - name: ftpsd
+#       protocol: TCP
+#       port: 21 #targetPort - внутренний порт, по которому можно связаться с контейнером
+#     - name: ftps0
+#       protocol: TCP
+#       port: 35000
+#     - name: ftps1
+#       protocol: TCP
+#       port: 35001
+#     - name: ftps2
+#       protocol: TCP
+#       port: 35002
+# ---
+
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: ftps
-  annotations:
-    metallb.universe.tf/allow-shared-ip: dvadvavosem
+  name: ftps-active
 spec:
   selector:
     app: ftps
+  # type: NodePort
   type: LoadBalancer
   loadBalancerIP: 34.116.235.52
-  externalIPs:
-    - 34.116.235.52
+  # externalIPs: [34.116.235.52]
   ports:
-    - name: ftps
-      protocol: TCP
-      port: 20
     - name: ftpsd
       protocol: TCP
       port: 21
-    - name: ftps0
+      targetPort: 21
+    - name: ftps
+      protocol: TCP
+      port: 20
+      targetPort: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ftps-passive
+spec:
+  selector:
+    app: ftps
+  # type: NodePort
+  type: LoadBalancer
+  loadBalancerIP: 34.116.235.52
+  # externalIPs: [34.116.235.52]
+  ports:
+    - name: ftps-passive0
       protocol: TCP
       port: 35000
-    - name: ftps1
+    - name: ftps-passive1
       protocol: TCP
       port: 35001
-    - name: ftps2
+    - name: ftps-passive2
       protocol: TCP
       port: 35002
-
+    - name: ftps-passive3
+      protocol: TCP
+      port: 35003
+    - name: ftps-passive4
+      protocol: TCP
+      port: 35004
+    - name: ftps-passive5
+      protocol: TCP
+      port: 35005
+    - name: ftps-passive6
+      protocol: TCP
+      port: 35006
+    - name: ftps-passive7
+      protocol: TCP
+      port: 35007
+    - name: ftps-passive8
+      protocol: TCP
+      port: 35008
+    - name: ftps-passive9
+      protocol: TCP
+      port: 35009
+    - name: ftps-passive10
+      protocol: TCP
+      port: 35010
+    - name: ftps-passive11
+      protocol: TCP
+      port: 35011
+    - name: ftps-passive12
+      protocol: TCP
+      port: 35012
+    - name: ftps-passive13
+      protocol: TCP
+      port: 35013
+    - name: ftps-passive14
+      protocol: TCP
+      port: 35014
+    - name: ftps-passive15
+      protocol: TCP
+      port: 35015
+    - name: ftps-passive16
+      protocol: TCP
+      port: 35016
+    - name: ftps-passive17
+      protocol: TCP
+      port: 35017
+    - name: ftps-passive18
+      protocol: TCP
+      port: 35018
+    - name: ftps-passive19
+      protocol: TCP
+      port: 35019
+    - name: ftps-passive20
+      protocol: TCP
+      port: 35020
+    - name: ftps-passive21
+      protocol: TCP
+      port: 35021
+    - name: ftps-passive22
+      protocol: TCP
+      port: 35022
+    - name: ftps-passive23
+      protocol: TCP
+      port: 35023
+    - name: ftps-passive24
+      protocol: TCP
+      port: 35024
+    - name: ftps-passive25
+      protocol: TCP
+      port: 35025
+    - name: ftps-passive26
+      protocol: TCP
+      port: 35026
+    - name: ftps-passive27
+      protocol: TCP
+      port: 35027
+    - name: ftps-passive28
+      protocol: TCP
+      port: 35028
+    - name: ftps-passive29
+      protocol: TCP
+      port: 35029
+    - name: ftps-passive30
+      protocol: TCP
+      port: 35030
+    - name: ftps-passive31
+      protocol: TCP
+      port: 35031
+    - name: ftps-passive32
+      protocol: TCP
+      port: 35032
+    - name: ftps-passive33
+      protocol: TCP
+      port: 35033
+    - name: ftps-passive34
+      protocol: TCP
+      port: 35034
+    - name: ftps-passive35
+      protocol: TCP
+      port: 35035
+    - name: ftps-passive36
+      protocol: TCP
+      port: 35036
+    - name: ftps-passive37
+      protocol: TCP
+      port: 35037
+    - name: ftps-passive38
+      protocol: TCP
+      port: 35038
+    - name: ftps-passive39
+      protocol: TCP
+      port: 35039
+    - name: ftps-passive40
+      protocol: TCP
+      port: 35040
+    - name: ftps-passive41
+      protocol: TCP
+      port: 35041
+    - name: ftps-passive42
+      protocol: TCP
+      port: 35042
+    - name: ftps-passive43
+      protocol: TCP
+      port: 35043
+    - name: ftps-passive44
+      protocol: TCP
+      port: 35044
+    - name: ftps-passive45
+      protocol: TCP
+      port: 35045
+    - name: ftps-passive46
+      protocol: TCP
+      port: 35046
+    - name: ftps-passive47
+      protocol: TCP
+      port: 35047
+    - name: ftps-passive48
+      protocol: TCP
+      port: 35048
+    - name: ftps-passive49
+      protocol: TCP
+      port: 35049
+    - name: ftps-passive50
+      protocol: TCP
+      port: 35050
+    - name: ftps-passive51
+      port: 35051
+    - name: ftps-passive52
+      port: 35052
+    - name: ftps-passive53
+      port: 35053
+    - name: ftps-passive54
+      port: 35054
+    - name: ftps-passive55
+      port: 35055
+    - name: ftps-passive56
+      port: 35056
+    - name: ftps-passive57
+      port: 35057
+    - name: ftps-passive58
+      port: 35058
+    - name: ftps-passive59
+      port: 35059
+    - name: ftps-passive60
+      port: 35060
+    - name: ftps-passive61
+      port: 35061
+    - name: ftps-passive62
+      port: 35062
+    - name: ftps-passive63
+      port: 35063
+    - name: ftps-passive64
+      port: 35064
+    - name: ftps-passive65
+      port: 35065
+    - name: ftps-passive66
+      port: 35066
+    - name: ftps-passive67
+      port: 35067
+    - name: ftps-passive68
+      port: 35068
+    - name: ftps-passive69
+      port: 35069
+    - name: ftps-passive70
+      port: 35070
+    - name: ftps-passive71
+      port: 35071
+    - name: ftps-passive72
+      port: 35072
+    - name: ftps-passive73
+      port: 35073
+    - name: ftps-passive74
+      port: 35074
+    - name: ftps-passive75
+      port: 35075
+    - name: ftps-passive76
+      port: 35076
+    - name: ftps-passive77
+      port: 35077
+    - name: ftps-passive78
+      port: 35078
+    - name: ftps-passive79
+      port: 35079
+    - name: ftps-passive80
+      port: 35080
+    - name: ftps-passive81
+      port: 35081
+    - name: ftps-passive82
+      port: 35082
+    - name: ftps-passive83
+      port: 35083
+    - name: ftps-passive84
+      port: 35084
+    - name: ftps-passive85
+      port: 35085
+    - name: ftps-passive86
+      port: 35086
+    - name: ftps-passive87
+      port: 35087
+    - name: ftps-passive88
+      port: 35088
+    - name: ftps-passive89
+      port: 35089
+    - name: ftps-passive90
+      port: 35090
+    - name: ftps-passive91
+      port: 35091
+    - name: ftps-passive92
+      port: 35092
+    - name: ftps-passive93
+      port: 35093
+    - name: ftps-passive94
+      port: 35094
+    - name: ftps-passive95
+      port: 35095
+    - name: ftps-passive96
+      port: 35096
+    - name: ftps-passive97
+      port: 35097
+    - name: ftps-passive98
+      port: 35098

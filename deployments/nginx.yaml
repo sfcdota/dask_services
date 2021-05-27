@@ -14,25 +14,27 @@ spec:
       labels:
         app: nginx
     spec:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: basic
       volumes:
-      - name: ftps-persistent-storage
+      - name: calc-persistent-storage
         persistentVolumeClaim:
-          claimName: ftps-pv-claim
+          claimName: calc-pvc
       containers:
       - name: nginx
         image: sfcdota/nginx
         imagePullPolicy: Always
         resources:
           requests:
-            memory: "64Mi"
-            cpu: "10m"
+            memory: "16Mi"
+            cpu: "1m"
           limits:
-            memory: "128Mi"
-            cpu: "100m"
+            memory: "512Mi"
+            cpu: "500m"
         ports:
           - containerPort: 80
           - containerPort: 443
           - containerPort: 22
         volumeMounts:
-        - name: ftps-persistent-storage
-          mountPath: /var/www/html/ftps_files
+        - name: calc-persistent-storage
+          mountPath: /ftps-files/csv-files

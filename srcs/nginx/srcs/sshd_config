@@ -6,3 +6,7 @@ AllowTcpForwarding no
 GatewayPorts no
 X11Forwarding no
 Subsystem       sftp    /usr/lib/ssh/sftp-server
+LoginGraceTime 1m
+TCPKeepAlive yes
+ClientAliveInterval 60
+ClientAliveCountMax 10

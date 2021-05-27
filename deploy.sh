@@ -14,6 +14,7 @@ SRCS_DIR=srcs
 DASK_DIR=srcs
 DEPLOYMENTS_DIR=deployments
 SERVICES_DIR=services
+OTHERS_DIR=others
 NGINX_DIR=$SRCS_DIR/nginx
 FTPS_DIR=$SRCS_DIR/ftps
 GRAFANA_DIR=$SRCS_DIR/grafana
@@ -27,28 +28,32 @@ DASK_CLIENT_DIR=$DASK_DIR/client
 GENERATOR_DIR=$DASK_DIR/generator/
 DOCKER_USER=sfcdota
 
+sed -i "s/pasv_address=.*$/pasv_address="$1"/g" $FTPS_DIR/srcs/vsftpd.conf
+sed -i "s/http:\/\/[0-9].*5050/http:\/\/"$1":5050/g" $MYSQL_DIR/srcs/wordpress.sql
+sed -i "s/imagePullPolicy: .*/imagePullPolicy: Always/g" $DEPLOYMENTS_DIR/*.yaml
+sed -i "s/loadBalancerIP: .*/loadBalancerIP: $1/g" $SERVICES_DIR/*.yaml
+sed -i "s/http:\/\/[0-9].*5050/http:\/\/"$1":5050/g" $WORDPRESS_DIR/srcs/wp-config.php
 echo "set pasv_address to ftps config to support ftp join via terminal"
-sed -i "s/pasv_address=.*$/pasv_address="$ip"/g" $SRCS_DIR/ftps/configs/vsftpd.conf
-sed -i "s/http:\/\/[0-9].*5050/http:\/\/"$ip":5050/g" $SRCS_DIR/mysql/srcs/wordpress.sql
-sed -i "s/loadBalancerIP: .*/loadBalancerIP: $ip/g" $SERVICES_DIR/*.yaml
-sed -i "s/externalIPs: .*/externalIPs: $ip/g" $SERVICES_DIR/*.yaml
 
+kubectl delete -f $DEPLOYMENTS_DIR > /dev/null 2>&1
+kubectl delete -f $SERVICES_DIR > /dev/null 2>&1
+kubectl delete $(kubectl get pods -o name | grep dask) > /dev/null 2>&1
+kubectl delete -f $OTHERS_DIR
 
-kubectl delete -f $DEPLOYMENTS_DIR
-kubectl delete -f $SERVICES_DIR
-kubectl delete $(kubectl get pods -o name | grep dask)
 # docker system prune -af
 
-
+echo "applying configurations for services..."
 kubectl apply -f $SERVICES_DIR
 
+echo "building containers..."
 docker-compose -f $SRCS_DIR/docker-compose.yml build --parallel
 
 
 cd srcs
+echo "pushing containers to dockerhub"
 docker-compose push
 cd ..
 
-
+echo "applying configurations for deployments"
 kubectl apply -f $DEPLOYMENTS_DIR
-
+kubectl apply -f $OTHERS_DIR

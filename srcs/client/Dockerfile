@@ -6,8 +6,8 @@ WORKDIR /dir/
 # COPY ./srcs/ .
 VOLUME /root
 RUN apt-get update -y && apt-get upgrade -y && \
-	pip install git+https://github.com/dask/distributed@main && pip install git+https://github.com/dask/dask@main \
-	pip install git+https://github.com/sfcdota/dask-kubernetes@main
+	pip install 'git+https://github.com/sfcdota/dask-kubernetes@main' dask==2021.04.1 \
+    distributed==2021.04.1 jupyter-server-proxy
 
 ENV "FTPS_DIR"="/ftps-files"
 ENV "CSV_DIR"="/ftps-files/csv-files"

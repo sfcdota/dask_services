@@ -10,7 +10,8 @@ RUN apk -U upgrade && apk add --no-cache nginx wget php7-fpm php7-common php7-ic
 		tar zxf phpMyAdmin.tar.gz && rm phpMyAdmin.tar.gz && \
 		mv phpMyAdmin-5.0.2-all-languages /var/www/html/phpmyadmin && \
 		mv config.inc.php /var/www/html/phpmyadmin/config.inc.php && \
-		mv php-fpm.conf /etc/php7/
+		chmod 644 /var/www/html/phpmyadmin/config.inc.php && \
+		mv php-fpm.conf /etc/php7/ && mkdir -p /var/www/html/phpmyadmin/tmp
 
 
 EXPOSE 5000

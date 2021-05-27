@@ -3,7 +3,7 @@
 define( 'DB_NAME', 'wordpress' );
 
 /** MySQL database username */
-define( 'DB_USER', 'cbach' );
+define( 'DB_USER', 'sfcdota' );
 
 /** MySQL database password */
 define( 'DB_PASSWORD', 'pass' );
@@ -17,6 +17,9 @@ define( 'DB_CHARSET', 'utf8' );
 /** The Database Collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
 
+define( 'WP_HOME', 'http://34.116.235.52:5050' );
+define( 'WP_SITEURL', 'http://34.116.235.52:5050' );
+define( 'RELOCATE', true );
 /**#@+
  * Authentication Unique Keys and Salts.
  *

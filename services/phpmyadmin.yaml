@@ -12,5 +12,3 @@ spec:
     app: phpmyadmin
   type: LoadBalancer
   loadBalancerIP: 34.116.235.52
-  externalIPs:
-    - 34.116.235.52

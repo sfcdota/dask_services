@@ -9,8 +9,6 @@ spec:
     app: grafana
   type: LoadBalancer
   loadBalancerIP: 34.116.235.52
-  externalIPs:
-    - 34.116.235.52
   ports:
     - name: grafana
       port: 3000

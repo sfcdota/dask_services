@@ -1,0 +1,71 @@
+kind: Role #тип объекта
+apiVersion: rbac.authorization.k8s.io/v1 #версия API для Role
+metadata: #мета информация
+  name: dask-server-role #имя объекта
+  namespace: default #пространство имен объекта
+rules: #массив аддитивных правил
+- apiGroups: #правило для API группы
+  - "" #наименование группы. основная API группа
+  resources: #массив ресурсов для правила
+  - "pods" #поды
+  - "pods/portforward" #portforward для пода
+  verbs: #массив разрешенных команд, используемых с ресурсами
+  - "get"
+  - "list"
+  - "watch"
+  - "create"
+  - "delete"
+- apiGroups:
+  - ""
+  resources:
+  - "pods/log"
+  verbs:
+  - "get"
+  - "list"
+- apiGroups:
+  - ""
+  resources:
+  - "services"
+  verbs:
+  - "get"
+  - "list"
+  - "watch"
+  # - "create". Будет создаваться вручную
+  # - "delete". Будет удаляться вручную
+- apiGroups:
+  - "policy"
+  resources:
+  - "poddisruptionbudgets"
+  verbs:
+  - "get"
+  - "list"
+  - "watch"
+  # - "create". Будет создаваться вручную
+  # - "delete". Будет удаляться вручную
+- apiGroups:
+  - ""
+  resources:
+  - "nodes"
+  verbs:
+  - "get"
+  - "list"
+---
+apiVersion: v1 #версия API
+kind: ServiceAccount #тип объекта
+metadata: #мета информация
+    name: dask-server-svc #имя объекта
+    namespace: default #пространство имен
+---
+apiVersion: rbac.authorization.k8s.io/v1 #версия API
+kind: RoleBinding #тип объекта
+metadata: #мета информация
+    name: dask-server-rolebind #имя объекта
+    namespace: default #пространство имен
+subjects: #массив субъектов, содержащих ссылки на объекты
+    - kind: ServiceAccount #тип субъекта
+      name: dask-server-svc #имя субъекта
+      namespace: default #пространство имен
+roleRef: #ссылка на роль
+    kind: Role #тип роли
+    name: dask-server-role #имя роли
+    apiGroup: rbac.authorization.k8s.io #API группа роли

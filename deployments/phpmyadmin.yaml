@@ -15,7 +15,7 @@ spec:
         app: phpmyadmin
     spec:
       nodeSelector:
-        cloud.google.com/gke-nodepool: basic
+        cloud.google.com/gke-nodepool: default-pool
       containers:
       - image: sfcdota/phpmyadmin
         name: phpmyadmin

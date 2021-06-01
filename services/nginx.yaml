@@ -16,6 +16,3 @@ spec:
     - name: https
       protocol: TCP
       port: 443
-    - name: ssh
-      protocol: TCP
-      port: 22

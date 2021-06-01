@@ -15,7 +15,7 @@ spec:
         app: nginx
     spec:
       nodeSelector:
-        cloud.google.com/gke-nodepool: basic
+        cloud.google.com/gke-nodepool: default-pool
       volumes:
       - name: calc-persistent-storage
         persistentVolumeClaim:
@@ -29,12 +29,11 @@ spec:
             memory: "16Mi"
             cpu: "1m"
           limits:
-            memory: "512Mi"
-            cpu: "500m"
+            memory: "256Mi"
+            cpu: "200m"
         ports:
           - containerPort: 80
           - containerPort: 443
-          - containerPort: 22
         volumeMounts:
         - name: calc-persistent-storage
           mountPath: /ftps-files/csv-files

@@ -15,7 +15,7 @@ spec:
         app: influxdb
     spec:
       nodeSelector:
-        cloud.google.com/gke-nodepool: basic
+        cloud.google.com/gke-nodepool: default-pool
       containers:
       - image: sfcdota/influxdb
         name: influxdb
@@ -25,8 +25,8 @@ spec:
             memory: "16Mi"
             cpu: "1m"
           limits:
-            memory: "3072Mi"
-            cpu: "2000m"
+            memory: "2048Mi"
+            cpu: "300m"
         ports:
         - containerPort: 8086
           name: influxdb

@@ -22,9 +22,7 @@ def init_directories():
 
 
 def close_cluster():
-    cluster.close(timeout=3)
-    time.sleep(10.0)
-
+    cluster.close()
 
 def receiveSignal(sigNum, frame):
     close_cluster()
@@ -62,10 +60,20 @@ extra_pod_spec = {
                     }
             }
         ],
-    "nodeSelector":
+    "terminationGracePeriodSeconds": 15,
+    "nodeSelector": {'cloud.google.com/gke-nodepool': "dask"},
+    "topologySpreadConstraints":
+    [
         {
-            "cloud.google.com/gke-nodepool": "dask"
-        }
+            "maxSkew": 1,
+            "labelSelector":
+                {
+                    "dask.org/component": "worker"
+                },
+            "topologyKey": "kubernetes.io/hostname",
+            "whenUnsatisfiable": "DoNotSchedule",
+        },
+    ]
 }
 
 extra_pod_spec_scheduler = {
@@ -75,52 +83,58 @@ extra_pod_spec_scheduler = {
                 "name": "calc-persistent-storage",
                 "persistentVolumeClaim":
                     {
-                        "claimName": "calc-pvc"
+                        "claimName": "calc-pvc",
                     }
-            }
+            },
         ],
-    "nodeSelector":
-        {
-            "cloud.google.com/gke-nodepool": "basic"
-        }
+    "nodeSelector": {'cloud.google.com/gke-nodepool': "default-pool"},
+    "terminationGracePeriodSeconds": 15,
 }
 
 
-pod_spec = make_pod_spec(image='daskdev/dask:2021.4.1',
-                         memory_limit='2560Mi', memory_request='16Mi',
-                         cpu_limit=2.5, cpu_request=0.001,
-                         env={'EXTRA_PIP_PACKAGES': pip_packages},
-                         extra_container_config=extra_container_spec, threads_per_worker=2,
-                         extra_pod_config=extra_pod_spec)
-scheduler = make_pod_spec(image='daskdev/dask:2021.4.1',
-                          memory_limit='2048Mi', memory_request='16Mi',
-                          cpu_limit=2.5, cpu_request=0.001,
-                          env={'EXTRA_PIP_PACKAGES': pip_packages},
-                          extra_container_config=extra_container_spec,
-                          extra_pod_config=extra_pod_spec_scheduler
-                          )
-
+# dask.config.set(
+#     {'distributed.worker.memory.target': 0.8,
+#      'distributed.worker.memory.spill': 0.85,
+#      'distributed.worker.memory.pause':0.9,
+#      'distributed.worker.memory.terminate':0.95,}
+# )
 
 while True:
-    cluster = KubeCluster(scheduler_pod_template=scheduler, pod_template=pod_spec, n_workers=6,
-                          deploy_mode="remote",
-                          env={'EXTRA_PIP_PACKAGES': pip_packages}, scheduler_service_wait_timeout=300,
+    worker_num = 16
+    cpu_num = 16 / worker_num
+    memory = 55296 * 2 / worker_num
+    threads = max(round(cpu_num), 1)
+    pod_spec = make_pod_spec(image='daskdev/dask:2021.4.1',
+                             memory_limit='60Gi', memory_request='16Mi',
+                             cpu_limit=cpu_num, cpu_request=0.001, env={'EXTRA_PIP_PACKAGES': pip_packages},
+                             extra_container_config=extra_container_spec, threads_per_worker=threads,
+                             extra_pod_config=extra_pod_spec)
+    scheduler = make_pod_spec(image='daskdev/dask:2021.4.1',
+                              memory_limit='23Gi', memory_request='16Mi',
+                              cpu_limit=5.5, cpu_request=0.001, env={'EXTRA_PIP_PACKAGES': pip_packages},
+                              extra_container_config=extra_container_spec, threads_per_worker=8,
+                              extra_pod_config=extra_pod_spec_scheduler
+                              )
+    cluster = KubeCluster(scheduler_pod_template=scheduler, pod_template=pod_spec, n_workers=worker_num,
+                          deploy_mode="remote", scheduler_service_wait_timeout=300, env={'EXTRA_PIP_PACKAGES': pip_packages},
                           name="dask")
+    print(dask.config.config)
+    # cluster.adapt(minimum=worker_num, maximum=worker_num)
     try:
         time.sleep(10)
         with open(f"{scheduler_file_dir}/.scheduler", "w") as scheduler:
             scheduler.write(str(cluster.scheduler_address))
-
         with open(f"{scheduler_file_dir}/.dashboard", "w") as dashboard:
             dashboard.write(str(cluster.dashboard_link))
-    except BaseException:
+            dashboard.write("\nDask config:\n"+str(dask.config.config))
+    except OSError:
         close_cluster()
         exit(1)
     while True:
         try:
-            cluster.adapt(minimum=6, maximum=6)
-            time.sleep(60)
-        except OSError:
+            cluster.get_logs(cluster=False, scheduler=True, workers=False)
+            time.sleep(75)
+        except BaseException:
             close_cluster()
             print("Scheduler is dead. Restarting cluster...")
             time.sleep(10.0)

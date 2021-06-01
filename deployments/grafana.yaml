@@ -15,7 +15,7 @@ spec:
         app: grafana
     spec:
       nodeSelector:
-        cloud.google.com/gke-nodepool: basic
+        cloud.google.com/gke-nodepool: default-pool
       containers:
       - name: grafana
         image: sfcdota/grafana

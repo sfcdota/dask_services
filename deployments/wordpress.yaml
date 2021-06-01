@@ -15,7 +15,7 @@ spec:
         app: wordpress
     spec:
       nodeSelector:
-        cloud.google.com/gke-nodepool: basic
+        cloud.google.com/gke-nodepool: default-pool
       containers:
       - image: sfcdota/wordpress
         name: wordpress
@@ -25,7 +25,7 @@ spec:
             memory: "16Mi"
             cpu: "1m"
           limits:
-            memory: "256Mi"
+            memory: "128Mi"
             cpu: "200m"
         ports:
         - containerPort: 5050

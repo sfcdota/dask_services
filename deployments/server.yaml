@@ -15,13 +15,13 @@ spec:
         app: server
     spec:
       nodeSelector:
-        cloud.google.com/gke-nodepool: basic
+        cloud.google.com/gke-nodepool: default-pool
       serviceAccountName: dask-server-svc
       volumes:
       - name: calc-persistent-storage
         persistentVolumeClaim:
           claimName: calc-pvc
-      terminationGracePeriodSeconds: 60
+      terminationGracePeriodSeconds: 15
       containers:
       - name: server
         image: sfcdota/server

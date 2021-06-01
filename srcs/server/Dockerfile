@@ -1,4 +1,4 @@
-FROM daskdev/dask:latest
+FROM daskdev/dask:2021.4.1
 WORKDIR /dir/
 RUN apt-get update -y && apt-get upgrade -y && \
 	pip install 'git+https://github.com/sfcdota/dask-kubernetes@main' dask==2021.04.1 \

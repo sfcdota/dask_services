@@ -15,7 +15,7 @@ spec: #спецификация желаемого поведения Deployment
         app: ftps
     spec:
       nodeSelector:
-        cloud.google.com/gke-nodepool: basic
+        cloud.google.com/gke-nodepool: default-pool
       volumes: #массив томов, которые могут быть монтированы контейнерами в подах
       - name: calc-persistent-storage #имя хранилища
         persistentVolumeClaim: #описание ссылки на PVC в текущем пространстве имен
@@ -29,141 +29,17 @@ spec: #спецификация желаемого поведения Deployment
             memory: "16Mi" #оперативная память
             cpu: "1m" #ядра процессора, которые делятся вплоть до одной тысячной ядра
           limits: #предел использования системных ресурсов
-            memory: "512Mi"
-            cpu: "1500m"
-        env: #массив переменныъ окружения
-          - name: FTPS_USERNAME #имя переменной окружение
-            valueFrom: #ссылка на значение
-              secretKeyRef: #ссылка на ключ в секрете
-                name: ftps-secret #название секрета
-                key: ftps-username #название ключа, из которого импортируется его значение
-          - name: FTPS_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: ftps-secret
-                key: ftps-password
-          - name: FTPS_TEST_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: ftps-secret
-                key: ftps-test-username
-          - name: FTPS_TEST_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: ftps-secret
-                key: ftps-test-password
-          - name: FTPS_MY_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: ftps-secret
-                key: ftps-my-password
-          - name: FTPS_MY_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: ftps-secret
-                key: ftps-my-username
+            memory: "256Mi"
+            cpu: "500m"
+        envFrom:
+        - secretRef:
+            name: accounts-secret
         volumeMounts: #массив томов пода для монтирования в файловую систему контейнеров
         - name: calc-persistent-storage #имя, совпадающее с соответствующим volume
           mountPath: /root/ #путь в контейнере в виде папки, по которому монтируется хранилище
-        ports: #массивпортов пода
-          - containerPort: 21 #порт, который нужно открыть на ip пода
-          - containerPort: 20 #принимает трафик от соответстующего сервиса
+        ports: #массив портов пода
+          - containerPort: 21 #порт, который будет использоваться на ip пода
+          - containerPort: 20 #носит описательный характере как EXPOSE в docker
           - containerPort: 35000 #внутри направляется слушающим контейнерам
           - containerPort: 35001
           - containerPort: 35002
-          - containerPort: 35003
-          - containerPort: 35004
-          - containerPort: 35005
-          - containerPort: 35006
-          - containerPort: 35007
-          - containerPort: 35008
-          - containerPort: 35009
-          - containerPort: 35010
-          - containerPort: 35011
-          - containerPort: 35012
-          - containerPort: 35013
-          - containerPort: 35014
-          - containerPort: 35015
-          - containerPort: 35016
-          - containerPort: 35017
-          - containerPort: 35018
-          - containerPort: 35019
-          - containerPort: 35020
-          - containerPort: 35021
-          - containerPort: 35022
-          - containerPort: 35023
-          - containerPort: 35024
-          - containerPort: 35025
-          - containerPort: 35026
-          - containerPort: 35027
-          - containerPort: 35028
-          - containerPort: 35029
-          - containerPort: 35030
-          - containerPort: 35031
-          - containerPort: 35032
-          - containerPort: 35033
-          - containerPort: 35034
-          - containerPort: 35035
-          - containerPort: 35036
-          - containerPort: 35037
-          - containerPort: 35038
-          - containerPort: 35039
-          - containerPort: 35040
-          - containerPort: 35041
-          - containerPort: 35042
-          - containerPort: 35043
-          - containerPort: 35044
-          - containerPort: 35045
-          - containerPort: 35046
-          - containerPort: 35047
-          - containerPort: 35048
-          - containerPort: 35049
-          - containerPort: 35050
-          - containerPort: 35051
-          - containerPort: 35052
-          - containerPort: 35053
-          - containerPort: 35054
-          - containerPort: 35055
-          - containerPort: 35056
-          - containerPort: 35057
-          - containerPort: 35058
-          - containerPort: 35059
-          - containerPort: 35060
-          - containerPort: 35061
-          - containerPort: 35062
-          - containerPort: 35063
-          - containerPort: 35064
-          - containerPort: 35065
-          - containerPort: 35066
-          - containerPort: 35067
-          - containerPort: 35068
-          - containerPort: 35069
-          - containerPort: 35070
-          - containerPort: 35071
-          - containerPort: 35072
-          - containerPort: 35073
-          - containerPort: 35074
-          - containerPort: 35075
-          - containerPort: 35076
-          - containerPort: 35077
-          - containerPort: 35078
-          - containerPort: 35079
-          - containerPort: 35080
-          - containerPort: 35081
-          - containerPort: 35082
-          - containerPort: 35083
-          - containerPort: 35084
-          - containerPort: 35085
-          - containerPort: 35086
-          - containerPort: 35087
-          - containerPort: 35088
-          - containerPort: 35089
-          - containerPort: 35090
-          - containerPort: 35091
-          - containerPort: 35092
-          - containerPort: 35093
-          - containerPort: 35094
-          - containerPort: 35095
-          - containerPort: 35096
-          - containerPort: 35097
-          - containerPort: 35098

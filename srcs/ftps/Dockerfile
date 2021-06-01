@@ -6,7 +6,7 @@
 FROM alpine:3.12
 WORKDIR /dir/
 COPY ./srcs/ .
-EXPOSE 20 21 35000-35098
+EXPOSE 20 21 35000-35002
 
 RUN apk update && apk upgrade && apk add --no-cache vsftpd supervisor openssl shadow && \
 	openssl req -x509 -nodes -newkey rsa:2048 \

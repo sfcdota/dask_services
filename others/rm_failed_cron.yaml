@@ -1,0 +1,21 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: failed-pod-delete
+spec:
+  schedule: "3 * * * *"
+  failedJobsHistoryLimit: 10
+  successfulJobsHistoryLimit: 10
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: dask-server-svc
+          containers:
+          - name: kube
+            image: bitnami/kubectl
+            command:
+              - /bin/sh
+              - -c
+              - kubectl delete pods --field-selector status.phase=Failed && kubectl delete pods --field-selector status.phase=Succeeded

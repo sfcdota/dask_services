@@ -20,3 +20,7 @@ nc -zv 172.17.0.2 21
 ftp 34.116.235.52 -> pass -> dir -> ls
 
 sudo docker inspect -f "{{ .NetworkSettings.IPAddress }}" nginx
+
+
+
+cat sshclient.py | ssh root@34.116.235.52 python

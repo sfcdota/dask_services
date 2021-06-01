@@ -1,0 +1,13 @@
+apiVersion: v1 #версия API для PVC
+kind: PersistentVolumeClaim #тип объекта
+metadata: #мета информация объекта
+  name: calc-pvc #имя объекта
+  labels: #метки объекта
+    app: ftps #метка с ключом app и значением ftps
+spec: #спецификация желаемого состояния
+  accessModes: #массив тип доступа
+    - ReadWriteOnce #чтение-запись для одного узла
+    - ReadOnlyMany #только чтение для нескольких узлов
+  resources: #описание ресурсов
+    requests: #запрос ресурсов
+      storage: 50Gi #запрос хранилища размером 50 ГБ

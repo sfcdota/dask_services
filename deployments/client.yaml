@@ -15,7 +15,7 @@ spec:
         app: client
     spec:
       nodeSelector:
-        cloud.google.com/gke-nodepool: basic
+        cloud.google.com/gke-nodepool: default-pool
       volumes:
       - name: calc-persistent-storage
         persistentVolumeClaim:
@@ -29,10 +29,13 @@ spec:
             memory: "16Mi"
             cpu: "1m"
           limits:
-            memory: "256Mi"
+            memory: "512Mi"
             cpu: "300m"
         ports:
-          - containerPort: 30001
+          - containerPort: 22
         volumeMounts:
         - name: calc-persistent-storage
           mountPath: /ftps-files/
+        envFrom:
+        - secretRef:
+            name: accounts-secret

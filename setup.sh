@@ -66,7 +66,7 @@ kubectl apply -f $SRCS_DIR/metallb.yaml
 kubectl apply -f $DEPLOYMENTS_DIR
 kubectl apply -f $SERVICES_DIR
 kubectl apply -f $OTHERS_DIR
-
+kubectl apply -f $OTHERS_DIR/datastorage/local.yaml
 # kubectl patch pvc ftps-pv-claim -p '{"metadata":{"finalizers": []}}' --type=merge
 
 sleep 8

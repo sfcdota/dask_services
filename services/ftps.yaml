@@ -3,7 +3,7 @@
 # metadata: #мета информация объекта
 #   name: ftps #имя объекта
 #   annotations: #аннотация для разделения адреса в MetalLB
-#     metallb.universe.tf/allow-shared-ip: dvadvavosem #произвольное значение
+#     metallb.universe.tf/allow-shared-ip: shared-services #произвольное значение
 # spec: #спецификация желаемого состояние сервиса
 #   selector: #селектор
 #     app: ftps #по метке app:ftps
@@ -32,7 +32,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ftps-active
+  name: dask
+  annotations:
+    metallb.universe.tf/allow-shared-ip: shared-services
 spec:
   selector:
     app: ftps
@@ -51,7 +53,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ftps-passive
+  name: dask
+  annotations:
+    metallb.universe.tf/allow-shared-ip: shared-services
 spec:
   selector:
     app: ftps

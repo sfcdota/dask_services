@@ -11,7 +11,7 @@ spec:
   - ReadOnlyMany
   nfs:
     path: /dask_storage
-    server: 10.154.63.186
+    server: 10.77.73.202
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

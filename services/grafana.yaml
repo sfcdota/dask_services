@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: grafana
   annotations:
-    metallb.universe.tf/allow-shared-ip: dvadvavosem
+    metallb.universe.tf/allow-shared-ip: shared-services
 spec:
   selector:
     app: grafana

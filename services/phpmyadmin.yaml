@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: phpmyadmin
   annotations:
-    metallb.universe.tf/allow-shared-ip: dvadvavosem
+    metallb.universe.tf/allow-shared-ip: shared-services
 spec:
   ports:
     - port: 5000

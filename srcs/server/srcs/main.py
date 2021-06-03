@@ -105,7 +105,7 @@ while True:
     memory = 55296 * 2 / worker_num
     threads = max(round(cpu_num), 1)
     pod_spec = make_pod_spec(image='daskdev/dask:2021.4.1',
-                             memory_limit='60Gi', memory_request='16Mi',
+                             memory_limit=str(memory * 8) + 'Mi', memory_request='16Mi',
                              cpu_limit=cpu_num, cpu_request=0.001, env={'EXTRA_PIP_PACKAGES': pip_packages},
                              extra_container_config=extra_container_spec, threads_per_worker=threads,
                              extra_pod_config=extra_pod_spec)
